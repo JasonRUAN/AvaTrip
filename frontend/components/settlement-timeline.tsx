@@ -67,8 +67,8 @@ export function SettlementTimeline({ steps }: { steps: SettlementStep[] }) {
       return;
     }
     const list = root.querySelector("ol");
-    const card = root.querySelector("li > div");
-    const button = card?.querySelector("button");
+    const card = root.querySelector<HTMLElement>("li > div");
+    const button = card?.querySelector<HTMLElement>("button");
     if (!list || !card || !button) return;
     const gap = Number.parseFloat(getComputedStyle(list).rowGap) || 0;
     const borderY = card.offsetHeight - card.clientHeight;
