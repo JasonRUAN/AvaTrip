@@ -8,6 +8,7 @@ import { maskFromCategories, type CategoryCode } from "@/lib/types";
 
 export function useRegistryAdmin() {
   const appChain = useAppChain();
+  const ensureWalletChain = appChain.ensureWalletChain;
   const { address } = useAccount();
   const { writeContractAsync, isPending } = useWriteContract();
   const { data: owner } = useReadContract({
@@ -31,6 +32,7 @@ export function useRegistryAdmin() {
       description: string;
       website: string;
     }) => {
+      await ensureWalletChain();
       const hash = await writeContractAsync({
         address: appChain.contracts.agentRegistry,
         chainId: appChain.chainId,
@@ -47,11 +49,12 @@ export function useRegistryAdmin() {
       });
       return hash;
     },
-    [appChain.chainId, appChain.contracts.agentRegistry, writeContractAsync]
+    [appChain.chainId, appChain.contracts.agentRegistry, ensureWalletChain, writeContractAsync]
   );
 
   const setActive = useCallback(
     async (agent: `0x${string}`, active: boolean) => {
+      await ensureWalletChain();
       return writeContractAsync({
         address: appChain.contracts.agentRegistry,
         chainId: appChain.chainId,
@@ -60,7 +63,7 @@ export function useRegistryAdmin() {
         args: [agent, active],
       });
     },
-    [appChain.chainId, appChain.contracts.agentRegistry, writeContractAsync]
+    [appChain.chainId, appChain.contracts.agentRegistry, ensureWalletChain, writeContractAsync]
   );
 
   return useMemo(

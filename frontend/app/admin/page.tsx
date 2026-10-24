@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import { AgentAdminCard } from "@/components/agent-card";
 import { WalletButton } from "@/components/wallet-button";
 import { useAgents } from "@/hooks/use-agents";
+import { useAppChain } from "@/lib/chain-context";
 import { useRegistryAdmin } from "@/hooks/use-registry-admin";
 import { type AgentHealth, isHttpUrl, parseHealthCategories, probeAgentHealth } from "@/lib/agent-health";
 import { HealthLamp } from "@/components/agent-card";
@@ -26,6 +27,7 @@ const inputClass =
 
 export default function AdminPage() {
   const { isConnected } = useAccount();
+  const appChain = useAppChain();
   const { isOwner, isPending, register, setActive } = useRegistryAdmin();
   const { agents, refresh } = useAgents();
   const { t, locale } = useT();
@@ -72,7 +74,7 @@ export default function AdminPage() {
 
   const onProbe = async () => {
     setHealth({ status: "checking" });
-    const result = await probeAgentHealth(endpoint, locale);
+    const result = await probeAgentHealth(endpoint, locale, appChain.chainId);
     setHealth(result);
   };
 

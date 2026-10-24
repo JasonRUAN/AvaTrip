@@ -537,6 +537,7 @@ export const en: Dictionary = {
     claimFailed: "Claim failed",
     approveFailed: "Approval failed",
     userRejected: "Wallet signature cancelled — please try again",
+    wrongChain: "The wallet is on a different network. Switch it to the network selected at the top, then try again.",
     backendUnreachable: "Cannot reach the agents service {url}: {msg}",
     orderRegisterFailed: "Order registration failed: HTTP {status} {detail}",
     settlementDisconnected:

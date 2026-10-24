@@ -524,6 +524,7 @@ export const zh = {
     claimFailed: "领取失败",
     approveFailed: "授权失败",
     userRejected: "钱包签名已取消，请重新操作",
+    wrongChain: "钱包还在别的网络上。请在钱包里切到页面顶部选中的网络后再试。",
     backendUnreachable: "无法连接 agents 服务 {url}：{msg}",
     orderRegisterFailed: "订单登记失败：HTTP {status} {detail}",
     settlementDisconnected: "分账进度连接断开（{url}）：{msg}",

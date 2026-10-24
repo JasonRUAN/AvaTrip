@@ -11,6 +11,7 @@ import {
   type CategoryCode,
   type OnchainReview,
 } from "@/lib/types";
+import { useAppChain } from "@/lib/chain-context";
 import { useT } from "@/lib/i18n/context";
 import { categoryLabel, categoryLabels } from "@/lib/i18n/labels";
 
@@ -237,6 +238,7 @@ export function AgentAdminCard({
 }) {
   const [health, setHealth] = useState<AgentHealth>({ status: "idle" });
   const { t, locale } = useT();
+  const appChain = useAppChain();
 
   return (
     <AgentShell category={agent.category}>
@@ -264,7 +266,7 @@ export function AgentAdminCard({
             disabled={!agent.endpoint || health.status === "checking"}
             onClick={() => {
               setHealth({ status: "checking" });
-              void probeAgentHealth(agent.endpoint, locale).then(setHealth);
+              void probeAgentHealth(agent.endpoint, locale, appChain.chainId).then(setHealth);
             }}
             className="cursor-pointer rounded-full border border-brand-200 px-2.5 py-1 text-[11px] font-bold text-brand-700 disabled:opacity-50"
           >

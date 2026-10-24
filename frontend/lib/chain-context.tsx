@@ -46,6 +46,7 @@ interface ChainContextValue {
   chain: AppChain;
   chains: AppChain[];
   selectChain: (key: string) => Promise<void>;
+  ensureWalletChain: () => Promise<void>;
 }
 
 const ChainContext = createContext<ChainContextValue | null>(null);
@@ -62,7 +63,7 @@ export function ChainProvider({
     readStoredChainKey,
     () => DEFAULT_CHAIN_KEY,
   );
-  const { isConnected } = useAccount();
+  const { isConnected, chainId: walletChainId } = useAccount();
   const { switchChainAsync } = useSwitchChain();
   const chain = getChainByKey(key) ?? DEFAULT_CHAIN;
 
@@ -85,9 +86,15 @@ export function ChainProvider({
     [isConnected, key, switchChainAsync],
   );
 
+  /** 写合约前把钱包切到页面当前网络。仅改顶栏不会改已连接的钱包。 */
+  const ensureWalletChain = useCallback(async () => {
+    if (!isConnected || walletChainId === chain.chainId) return;
+    await switchChainAsync({ chainId: chain.chainId });
+  }, [chain.chainId, isConnected, switchChainAsync, walletChainId]);
+
   const value = useMemo(
-    () => ({ chain, chains, selectChain }),
-    [chain, chains, selectChain],
+    () => ({ chain, chains, selectChain, ensureWalletChain }),
+    [chain, chains, ensureWalletChain, selectChain],
   );
 
   return (
@@ -97,9 +104,15 @@ export function ChainProvider({
 
 export function useAppChain(): AppChain & {
   selectChain: (key: string) => Promise<void>;
+  ensureWalletChain: () => Promise<void>;
   chains: AppChain[];
 } {
   const ctx = useContext(ChainContext);
   if (!ctx) throw new Error("useAppChain 必须在 ChainProvider 内使用");
-  return { ...ctx.chain, selectChain: ctx.selectChain, chains: ctx.chains };
+  return {
+    ...ctx.chain,
+    selectChain: ctx.selectChain,
+    ensureWalletChain: ctx.ensureWalletChain,
+    chains: ctx.chains,
+  };
 }

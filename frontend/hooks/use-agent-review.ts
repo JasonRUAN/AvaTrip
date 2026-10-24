@@ -69,6 +69,7 @@ export function useTokenReview(tokenId?: string) {
 
 export function useSubmitReview(tokenId: string) {
   const appChain = useAppChain();
+  const ensureWalletChain = appChain.ensureWalletChain;
   const { address } = useAccount();
   const publicClient = usePublicClient({ chainId: appChain.chainId });
   const { writeContractAsync, isPending } = useWriteContract();
@@ -87,6 +88,7 @@ export function useSubmitReview(tokenId: string) {
         return false;
       }
       try {
+        await ensureWalletChain();
         const hash = await writeContractAsync({
           address: appChain.contracts.agentReview,
           abi: REVIEW_ABI,
@@ -103,7 +105,7 @@ export function useSubmitReview(tokenId: string) {
         return false;
       }
     },
-    [address, appChain.chainId, appChain.contracts.agentReview, appChain.reviewDeployed, publicClient, t, locale, tokenId, writeContractAsync]
+    [address, appChain.chainId, appChain.contracts.agentReview, appChain.reviewDeployed, ensureWalletChain, publicClient, t, locale, tokenId, writeContractAsync]
   );
 
   return { submit, isPending, error, address };

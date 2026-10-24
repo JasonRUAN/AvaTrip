@@ -53,9 +53,28 @@ export function parseHealthCategories(raw: Array<string | number>): CategoryCode
   return [...codes].sort((a, b) => a - b);
 }
 
+function chainLinked(
+  data: {
+    chain?: boolean;
+    chainConfigured?: boolean;
+    chains?: Array<{ chainId?: number; ready?: boolean }>;
+  },
+  chainId?: number
+): boolean {
+  const listed = data.chains ?? [];
+  if (chainId != null) {
+    const match = listed.find((item) => item.chainId === chainId);
+    if (match) return Boolean(match.ready);
+  }
+  if (typeof data.chain === "boolean") return data.chain;
+  if (typeof data.chainConfigured === "boolean") return data.chainConfigured;
+  return listed.some((item) => item.ready);
+}
+
 export async function probeAgentHealth(
   endpoint: string,
-  locale: Locale
+  locale: Locale,
+  chainId?: number
 ): Promise<AgentHealth> {
   const health = getDict(locale).health;
   const base = normalizeEndpoint(endpoint);
@@ -73,6 +92,7 @@ export async function probeAgentHealth(
       category?: string;
       chain?: boolean;
       chainConfigured?: boolean;
+      chains?: Array<{ chainId?: number; ready?: boolean }>;
     };
     if (!data.ok) return { status: "error", message: health.notOk };
     return {
@@ -80,7 +100,7 @@ export async function probeAgentHealth(
       service: data.service ?? "unknown",
       address: data.address ?? "",
       categories: data.categories ?? (data.category ? [data.category] : []),
-      chain: Boolean(data.chain ?? data.chainConfigured),
+      chain: chainLinked(data, chainId),
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : health.probeFailed;

@@ -84,6 +84,7 @@ export function useCheckout(params: {
   const runId = params.runId;
   const { address, isConnected } = useAccount();
   const appChain = useAppChain();
+  const ensureWalletChain = appChain.ensureWalletChain;
   const contracts = appChain.contracts;
   const isDeployed = appChain.deployed;
   const publicClient = usePublicClient({ chainId: appChain.chainId });
@@ -196,6 +197,7 @@ export function useCheckout(params: {
     setBusy("faucet");
     setError(null);
     try {
+      await ensureWalletChain();
       const hash = await writeContractAsync({
         address: contracts.usdc,
         abi: USDC_ABI,
@@ -211,13 +213,14 @@ export function useCheckout(params: {
     } finally {
       setBusy(null);
     }
-  }, [appChain.chainId, contracts.usdc, isDeployed, publicClient, refreshFunds, writeContractAsync]);
+  }, [appChain.chainId, contracts.usdc, ensureWalletChain, isDeployed, publicClient, refreshFunds, writeContractAsync]);
 
   const approve = useCallback(async () => {
     if (!isDeployed) return;
     setBusy("approve");
     setError(null);
     try {
+      await ensureWalletChain();
       const hash = await writeContractAsync({
         address: contracts.usdc,
         abi: USDC_ABI,
@@ -234,7 +237,7 @@ export function useCheckout(params: {
     } finally {
       setBusy(null);
     }
-  }, [appChain.chainId, contracts.tripSettlement, contracts.usdc, isDeployed, publicClient, refreshFunds, total, writeContractAsync]);
+  }, [appChain.chainId, contracts.tripSettlement, contracts.usdc, ensureWalletChain, isDeployed, publicClient, refreshFunds, total, writeContractAsync]);
 
   /** 未部署合约时走模拟：直接登记订单，后端会用模拟分账 + 模拟发券 */
   const registerOrder = useCallback(
@@ -372,6 +375,7 @@ export function useCheckout(params: {
 
     setBusy("prepare");
     try {
+      await ensureWalletChain();
       // createOrder 内部会 usdc.transferFrom，余额不足会被 atUSDC 以
       // InsufficientBalance(0xf4d678b8) revert。水龙头可重复领取，
       // 余额不够时自动补领（每单上限 5 次，防止死循环烧 gas）。
@@ -463,6 +467,7 @@ export function useCheckout(params: {
   }, [
     address,
     appChain.chainId,
+    ensureWalletChain,
     contracts.tripSettlement,
     contracts.usdc,
     isConnected,

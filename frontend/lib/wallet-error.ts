@@ -16,6 +16,14 @@ export function isUserRejected(error: unknown): boolean {
   );
 }
 
+/** 钱包所在链和页面要写的链不一致，交易还没发出去 */
+export function isChainMismatch(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    /does not match the target chain|ChainMismatch/i.test(error.message)
+  );
+}
+
 /** 用户取消 → 本地化文案；其余 Error → 原文；非 Error → 调用方给的兜底文案 */
 export function walletErrorText(
   locale: Locale,
@@ -23,5 +31,6 @@ export function walletErrorText(
   fallback: string
 ): string {
   if (isUserRejected(error)) return getDict(locale).errors.userRejected;
+  if (isChainMismatch(error)) return getDict(locale).errors.wrongChain;
   return error instanceof Error ? error.message : fallback;
 }
