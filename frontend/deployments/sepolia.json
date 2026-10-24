@@ -1,0 +1,16 @@
+{
+  "agentRegistry": "0x1b56B40cBE0AE280F93bb97a9c3583fC6f209Baf",
+  "agentReview": "0x49787bed1cc64cE729BE82A6F886610f0DD5a2b3",
+  "agents": {
+    "attraction": "0x2102A75052eF18e69a6f36C28C8E56C276eae048",
+    "dining": "0xb04B224AcF8a2C27E1B112cA5E9ED9f05e876f7b",
+    "flight": "0x48548074C2553eAEBABbc91Bb983c5bA4eD351A5",
+    "hotel": "0xE1783a22A6D14f6751B440baDfE678B75c55A1ad"
+  },
+  "chainId": 11155111,
+  "deployed": true,
+  "orchestrator": "0xCace75F466b1334FbDdF4d75CA0702f9c398d551",
+  "travelVoucher": "0x8e39cceE8c230064016b3d2c574EaB9E5BDba698",
+  "tripSettlement": "0xE1c08230e5Bdd1122FD328a142ac38a59f783C2d",
+  "usdc": "0xa54a36ED0bCC27c89402e9e08C4fe9945A4f1743"
+}

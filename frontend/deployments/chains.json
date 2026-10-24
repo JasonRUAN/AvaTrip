@@ -1,0 +1,53 @@
+{
+  "default": "sepolia",
+  "chains": [
+    {
+      "key": "sepolia",
+      "chainId": 11155111,
+      "name": "Ethereum Sepolia",
+      "shortName": "Sepolia",
+      "nativeSymbol": "ETH",
+      "rpcEnv": "SEPOLIA_RPC",
+      "defaultRpc": "https://ethereum-sepolia-rpc.publicnode.com",
+      "deploymentFile": "sepolia.json",
+      "explorers": {
+        "home": "https://sepolia.etherscan.io",
+        "tx": "https://sepolia.etherscan.io/tx/{hash}",
+        "address": "https://sepolia.etherscan.io/address/{address}",
+        "token": "https://sepolia.etherscan.io/token/{contract}"
+      }
+    },
+    {
+      "key": "monad",
+      "chainId": 10143,
+      "name": "Monad Testnet",
+      "shortName": "Monad",
+      "nativeSymbol": "MON",
+      "rpcEnv": "MONAD_RPC",
+      "defaultRpc": "https://testnet-rpc.monad.xyz",
+      "deploymentFile": "monad.json",
+      "explorers": {
+        "home": "https://testnet.monadscan.com",
+        "tx": "https://testnet.monadscan.com/tx/{hash}",
+        "address": "https://testnet.monadscan.com/address/{address}",
+        "token": "https://testnet.monadscan.com/token/{contract}"
+      }
+    },
+    {
+      "key": "fuji",
+      "chainId": 43113,
+      "name": "Avalanche Fuji",
+      "shortName": "Fuji",
+      "nativeSymbol": "AVAX",
+      "rpcEnv": "FUJI_RPC",
+      "defaultRpc": "https://api.avax-test.network/ext/bc/C/rpc",
+      "deploymentFile": "fuji.json",
+      "explorers": {
+        "home": "https://subnets-test.avax.network/c-chain",
+        "tx": "https://subnets-test.avax.network/c-chain/tx/{hash}",
+        "address": "https://subnets-test.avax.network/c-chain/address/{address}",
+        "token": "https://subnets-test.avax.network/c-chain/token/{contract}"
+      }
+    }
+  ]
+}
